@@ -2,16 +2,19 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { Flex, Typography, Select, Input, Space, Button } from "antd";
 import TablePagination from "../components/TablePagination";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 const { Title, Text } = Typography;
 const { Search } = Input;
 import { debounce } from "../utils/utils";
 import { useGetAllProducts } from "../hooks/useProducts";
+import DetailModal from "../components/DetailModal";
 
 export default function Page() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [search, setSearch] = useState("");
+  const [openDetail, setOpenDetail] = useState(false);
+  const [selectedId, setSelectedId] = useState("");
 
   const { data, isLoading, error } = useGetAllProducts({ page, limit, search });
 
@@ -38,6 +41,10 @@ export default function Page() {
       }),
     [],
   );
+
+  useEffect(() => {
+    console.log("selected Id : ", selectedId);
+  }, [selectedId]);
 
   return (
     <Flex className="h-full" vertical gap={12}>
@@ -84,6 +91,13 @@ export default function Page() {
         setPage={(page: number) => setPage(page)}
         isLoading={isLoading}
         total={total}
+        setSelectedId={(id: string) => setSelectedId(id)}
+        setOpenDetail={(open: boolean) => setOpenDetail(open)}
+      />
+      <DetailModal
+        open={openDetail}
+        setOpen={(stat: boolean) => setOpenDetail(stat)}
+        selectedId={selectedId}
       />
     </Flex>
   );

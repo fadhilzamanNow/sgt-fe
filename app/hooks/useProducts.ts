@@ -17,6 +17,15 @@ interface GetAllProductsResponse {
   };
 }
 
+interface GetProductIdResponse {
+  data: Product;
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+  };
+}
+
 const fetchProducts = async ({
   page,
   limit,
@@ -35,6 +44,17 @@ const fetchProducts = async ({
   return response.data;
 };
 
+const fetchProductById = async (id: string): Promise<GetProductIdResponse> => {
+  const token = localStorage.getItem("token");
+  const response = await axios.get(`/api/product?product_id=${id}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};
+
 export const useGetAllProducts = ({
   page,
   limit,
@@ -43,5 +63,12 @@ export const useGetAllProducts = ({
   return useQuery({
     queryKey: ["products", page, limit, search],
     queryFn: () => fetchProducts({ page, limit, search }),
+  });
+};
+
+export const useGetProductById = (id: string) => {
+  return useQuery({
+    queryKey: ["product", id],
+    queryFn: () => fetchProductById(id),
   });
 };
