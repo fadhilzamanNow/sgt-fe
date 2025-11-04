@@ -9,6 +9,7 @@ import { debounce } from "../utils/utils";
 import { useGetAllProducts } from "../hooks/useProducts";
 import DetailModal from "../components/DetailModal";
 import CreateModal from "../components/CreateModal";
+import EditModal from "../components/EditModal";
 
 export default function Page() {
   const [page, setPage] = useState(1);
@@ -16,6 +17,7 @@ export default function Page() {
   const [search, setSearch] = useState("");
   const [openCreate, setOpenCreate] = useState(false);
   const [openDetail, setOpenDetail] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
   const [selectedId, setSelectedId] = useState("");
 
   const { data, isLoading, error } = useGetAllProducts({ page, limit, search });
@@ -100,7 +102,7 @@ export default function Page() {
         total={total}
         setSelectedId={(id: string) => setSelectedId(id)}
         setOpenDetail={(open: boolean) => setOpenDetail(open)}
-        setOpenCreate={(open: boolean) => setOpenCreate(open)}
+        setOpenEdit={(open: boolean) => setOpenEdit(open)}
       />
       <DetailModal
         open={openDetail}
@@ -110,6 +112,11 @@ export default function Page() {
       <CreateModal
         open={openCreate}
         setOpen={(stat: boolean) => setOpenCreate(stat)}
+      />
+      <EditModal
+        open={openEdit}
+        setOpen={(stat: boolean) => setOpenEdit(stat)}
+        selectedId={selectedId}
       />
     </Flex>
   );

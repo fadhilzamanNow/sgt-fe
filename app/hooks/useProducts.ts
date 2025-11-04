@@ -66,6 +66,17 @@ const createProduct = async (product: any): Promise<Product> => {
   return response.data;
 };
 
+const editProduct = async (product: any): Promise<Product> => {
+  const token = localStorage.getItem("token");
+  const response = await axios.put("/api/product", product, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};
+
 export const useGetAllProducts = ({
   page,
   limit,
@@ -91,6 +102,18 @@ export const useCreateProduct = () => {
     mutationFn: createProduct,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
+    },
+  });
+};
+
+export const useEditProduct = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: editProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+      queryClient.invalidateQueries({ queryKey: ["product"] });
     },
   });
 };

@@ -11,7 +11,7 @@ interface TablePaginationProps {
   total: number;
   setSelectedId: (id: string) => void;
   setOpenDetail: (open: boolean) => void;
-  setOpenCreate: (open: boolean) => void;
+  setOpenEdit: (open: boolean) => void;
 }
 
 export default function TablePagination({
@@ -23,7 +23,7 @@ export default function TablePagination({
   total,
   setSelectedId,
   setOpenDetail,
-  setOpenCreate,
+  setOpenEdit,
 }: TablePaginationProps) {
   const columns = useMemo(
     () => [
@@ -61,7 +61,13 @@ export default function TablePagination({
               Detail
             </Button>
 
-            <Button className="!bg-yellow-300 hover:!bg-yellow-400 !text-white !border-none">
+            <Button
+              className="!bg-yellow-300 hover:!bg-yellow-400 !text-white !border-none"
+              onClick={() => {
+                setSelectedId(row.product_id);
+                setOpenEdit(true);
+              }}
+            >
               Edit
             </Button>
             <Button className="!bg-red-500 !text-white !border-none hover:!bg-red-600">
@@ -71,7 +77,7 @@ export default function TablePagination({
         ),
       },
     ],
-    [setSelectedId, setOpenDetail],
+    [setSelectedId, setOpenDetail, setOpenEdit],
   );
 
   return (

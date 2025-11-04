@@ -27,3 +27,18 @@ export async function POST(req: NextRequest) {
     }
   }
 }
+
+export async function PUT(req: NextRequest) {
+  const body = await req.json();
+  const params = req.nextUrl.searchParams;
+  try {
+    const response = await baseApi.put("/product", body, {
+      params: { product_id: params.get("product_id") },
+    });
+    return NextResponse.json(response.data);
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(error.message);
+    }
+  }
+}
