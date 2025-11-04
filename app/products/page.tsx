@@ -61,12 +61,12 @@ export default function Page() {
         />
         <Button type="primary">
           <PlusOutlined />
-          <span
-            className="border-none flex items-center"
+          <Text
+            className="border-none flex items-center !text-white"
             onClick={() => setOpenCreate(true)}
           >
             Add Product
-          </span>
+          </Text>
         </Button>
       </Flex>
       <Flex justify="space-between" align="center" vertical={false}>

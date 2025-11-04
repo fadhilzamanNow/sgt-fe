@@ -1,4 +1,4 @@
-import { Button, Space, Table } from "antd";
+import { Button, message, Space, Table } from "antd";
 import { type Product } from "../types/product";
 import { useMemo } from "react";
 
@@ -25,6 +25,8 @@ export default function TablePagination({
   setOpenDetail,
   setOpenEdit,
 }: TablePaginationProps) {
+  const [messageApi, contextHolder] = message.useMessage();
+
   const columns = useMemo(
     () => [
       {
@@ -70,28 +72,36 @@ export default function TablePagination({
             >
               Edit
             </Button>
-            <Button className="!bg-red-500 !text-white !border-none hover:!bg-red-600">
+            <Button
+              className="!bg-red-500 !text-white !border-none hover:!bg-red-600"
+              onClick={() => {
+                messageApi.info("Delete feature will be available soon", 1);
+              }}
+            >
               Delete
             </Button>
           </Space>
         ),
       },
     ],
-    [setSelectedId, setOpenDetail, setOpenEdit],
+    [setSelectedId, setOpenDetail, setOpenEdit, messageApi],
   );
 
   return (
-    <Table
-      columns={columns}
-      dataSource={products}
-      loading={isLoading}
-      pagination={{
-        position: ["bottomCenter"],
-        pageSize: limit,
-        total: total,
-        onChange: (p) => setPage(p),
-        current: page,
-      }}
-    />
+    <>
+      {contextHolder}
+      <Table
+        columns={columns}
+        dataSource={products}
+        loading={isLoading}
+        pagination={{
+          position: ["bottomCenter"],
+          pageSize: limit,
+          total: total,
+          onChange: (p) => setPage(p),
+          current: page,
+        }}
+      />
+    </>
   );
 }
