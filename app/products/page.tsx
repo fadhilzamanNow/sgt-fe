@@ -7,11 +7,12 @@ import axios from "axios";
 const { Title, Text } = Typography;
 const { Search } = Input;
 import { type Product } from "../types/product";
+import { debounce } from "../utils/utils";
 
 export default function Page() {
   const [products, setProducts] = useState<Product[]>([]);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(5);
   const [search, setSearch] = useState("");
   const [total, setTotal] = useState(0);
   const firstElement = useMemo(() => page * limit - limit + 1, [limit, page]);
@@ -21,11 +22,14 @@ export default function Page() {
   );
   const fetchProducts = useCallback(async () => {
     try {
-      const response = await axios.get("/api/products", {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+      const response = await axios.get(
+        `/api/products?page=${page}&limit=${limit}&q=${search}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         },
-      });
+      );
       const newProducts = response.data.data.map(
         (item: Product, ind: number) => ({
           ...item,
@@ -37,35 +41,34 @@ export default function Page() {
     } catch (error) {
       console.error(error);
     }
-  }, []);
+  }, [page, limit, search]);
+
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((value: string) => {
+        setSearch(value);
+        setPage(1);
+      }),
+    [],
+  );
 
   useEffect(() => {
     fetchProducts();
   }, [fetchProducts]);
 
+  useEffect(() => {
+    console.log(page, limit);
+  }, [page, limit]);
+
   return (
     <Flex className="h-full" vertical gap={12}>
       <Title level={2}>Product Management</Title>
-      <Flex justify="space-between" align="center">
-        <Space size={10}>
-          <Select
-            placeholder="Select product based on category"
-            className="!min-w-[320px]"
-            options={[
-              { value: "product1", label: "Product 1" },
-              { value: "product2", label: "Product 2" },
-              { value: "product3", label: "Product 3" },
-            ]}
-          />
-          <Search
-            placeholder="Search product based on product name"
-            style={{ minWidth: 320 }}
-          />
-          <Search
-            placeholder="Search product based on category name"
-            style={{ minWidth: 320 }}
-          />
-        </Space>
+      <Flex justify="space-between" align="center" vertical={false}>
+        <Search
+          placeholder="Search product based on product category, name or description"
+          className="!w-120"
+          onChange={(e) => debouncedSearch(e.target.value)}
+        />
         <Button type="primary">
           <PlusOutlined />
           <span className="border-none flex items-center">Add Product</span>
@@ -95,7 +98,13 @@ export default function Page() {
           <Text>entri</Text>
         </Space>
       </Flex>
-      <TablePagination products={products} page={page} limit={limit} />
+      <TablePagination
+        products={products}
+        page={page}
+        limit={limit}
+        setPage={(page: number) => setPage(page)}
+        page={page}
+      />
     </Flex>
   );
 }

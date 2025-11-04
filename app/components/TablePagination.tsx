@@ -1,19 +1,5 @@
 import { Button, Space, Table } from "antd";
 import { type Product } from "../types/product";
-const dataSource = [
-  {
-    key: "1",
-    name: "Mike",
-    age: 32,
-    address: "10 Downing Street",
-  },
-  {
-    key: "2",
-    name: "John",
-    age: 42,
-    address: "10 Downing Street",
-  },
-];
 
 const columns = [
   {
@@ -56,12 +42,14 @@ interface TablePaginationProps {
   products: Product[];
   page: number;
   limit: number;
+  setPage: (page: number) => void;
 }
 
 export default function TablePagination({
   products,
-  page,
+  setPage,
   limit,
+  page,
 }: TablePaginationProps) {
   return (
     <Table
@@ -71,7 +59,8 @@ export default function TablePagination({
         position: ["bottomCenter"],
         pageSize: limit,
         total: 50,
-        onChange: (p) => console.log(p),
+        onChange: (p) => setPage(p),
+        current: page,
       }}
     />
   );

@@ -1,10 +1,17 @@
 import { baseApi } from "@/app/utils/axios";
 import { AxiosError } from "axios";
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
-    const response = await baseApi.get("/products");
+    const params = req.nextUrl.searchParams;
+    const response = await baseApi.get("/products", {
+      params: {
+        page: params.get("page"),
+        limit: params.get("limit"),
+        q: params.get("q"),
+      },
+    });
     return NextResponse.json(response.data);
   } catch (error) {
     if (error instanceof AxiosError) {
