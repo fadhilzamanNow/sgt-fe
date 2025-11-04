@@ -101,7 +101,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               className="!my-4"
               items={[{ title: <HomeOutlined /> }, { title: "Product " }]}
             />
-            <div className="bg-white rounded-sm p-4 ">{children}</div>
+            <div className="bg-white rounded-sm !p-4 ">{children}</div>
           </Content>
         </Layouts>
       </Layouts>
