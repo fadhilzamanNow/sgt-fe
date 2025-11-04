@@ -11,6 +11,7 @@ interface TablePaginationProps {
   total: number;
   setSelectedId: (id: string) => void;
   setOpenDetail: (open: boolean) => void;
+  setOpenCreate: (open: boolean) => void;
 }
 
 export default function TablePagination({
@@ -22,6 +23,7 @@ export default function TablePagination({
   total,
   setSelectedId,
   setOpenDetail,
+  setOpenCreate,
 }: TablePaginationProps) {
   const columns = useMemo(
     () => [

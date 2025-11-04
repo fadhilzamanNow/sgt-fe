@@ -15,3 +15,15 @@ export async function GET(req: NextRequest) {
     }
   }
 }
+
+export async function POST(req: NextRequest) {
+  const body = await req.json();
+  try {
+    const response = await baseApi.post("/product", body);
+    return NextResponse.json(response.data);
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw new Error(error.message);
+    }
+  }
+}

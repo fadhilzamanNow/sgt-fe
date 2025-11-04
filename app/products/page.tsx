@@ -8,11 +8,13 @@ const { Search } = Input;
 import { debounce } from "../utils/utils";
 import { useGetAllProducts } from "../hooks/useProducts";
 import DetailModal from "../components/DetailModal";
+import CreateModal from "../components/CreateModal";
 
 export default function Page() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [search, setSearch] = useState("");
+  const [openCreate, setOpenCreate] = useState(false);
   const [openDetail, setOpenDetail] = useState(false);
   const [selectedId, setSelectedId] = useState("");
 
@@ -57,7 +59,12 @@ export default function Page() {
         />
         <Button type="primary">
           <PlusOutlined />
-          <span className="border-none flex items-center">Add Product</span>
+          <span
+            className="border-none flex items-center"
+            onClick={() => setOpenCreate(true)}
+          >
+            Add Product
+          </span>
         </Button>
       </Flex>
       <Flex justify="space-between" align="center" vertical={false}>
@@ -93,11 +100,16 @@ export default function Page() {
         total={total}
         setSelectedId={(id: string) => setSelectedId(id)}
         setOpenDetail={(open: boolean) => setOpenDetail(open)}
+        setOpenCreate={(open: boolean) => setOpenCreate(open)}
       />
       <DetailModal
         open={openDetail}
         setOpen={(stat: boolean) => setOpenDetail(stat)}
         selectedId={selectedId}
+      />
+      <CreateModal
+        open={openCreate}
+        setOpen={(stat: boolean) => setOpenCreate(stat)}
       />
     </Flex>
   );

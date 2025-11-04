@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Product } from "../types/product";
 
@@ -55,6 +55,17 @@ const fetchProductById = async (id: string): Promise<GetProductIdResponse> => {
   return response.data;
 };
 
+const createProduct = async (product: any): Promise<Product> => {
+  const token = localStorage.getItem("token");
+  const response = await axios.post("/api/product", product, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return response.data;
+};
+
 export const useGetAllProducts = ({
   page,
   limit,
@@ -70,5 +81,16 @@ export const useGetProductById = (id: string) => {
   return useQuery({
     queryKey: ["product", id],
     queryFn: () => fetchProductById(id),
+  });
+};
+
+export const useCreateProduct = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: createProduct,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+    },
   });
 };

@@ -1,13 +1,4 @@
-import {
-  Button,
-  DescriptionsProps,
-  Flex,
-  Modal,
-  Skeleton,
-  Space,
-  Typography,
-  Image,
-} from "antd";
+import { Button, Flex, Modal, Skeleton, Space, Typography, Image } from "antd";
 import { useGetProductById } from "../hooks/useProducts";
 import { useMemo, useState } from "react";
 import { format } from "date-fns";
@@ -17,24 +8,6 @@ interface DetailModalProps {
   setOpen: (stat: boolean) => void;
   selectedId: string;
 }
-
-const items: DescriptionsProps["items"] = [
-  {
-    key: "1",
-    label: "Product",
-    children: "Cloud Database",
-  },
-  {
-    key: "2",
-    label: "Billing Mode",
-    children: "Prepaid",
-  },
-  {
-    key: "3",
-    label: "Automatic Renewal",
-    children: "YES",
-  },
-];
 
 const { Text } = Typography;
 
@@ -61,7 +34,7 @@ export default function DetailModal({
   }, [data]);
   return (
     <Modal
-      title="Detail Produk"
+      title="Product Detail"
       open={open}
       closable={false}
       onCancel={() => setOpen(false)}
