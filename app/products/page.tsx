@@ -2,46 +2,33 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { Flex, Typography, Select, Input, Space, Button } from "antd";
 import TablePagination from "../components/TablePagination";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import axios from "axios";
+import { useMemo, useState } from "react";
 const { Title, Text } = Typography;
 const { Search } = Input;
-import { type Product } from "../types/product";
 import { debounce } from "../utils/utils";
+import { useGetAllProducts } from "../hooks/useProducts";
 
 export default function Page() {
-  const [products, setProducts] = useState<Product[]>([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
   const [search, setSearch] = useState("");
-  const [total, setTotal] = useState(0);
+
+  const { data, isLoading, error } = useGetAllProducts({ page, limit, search });
+
+  const products = useMemo(
+    () =>
+      data?.data.map((item, ind) => ({
+        ...item,
+        id: ind + 1,
+      })) || [],
+    [data],
+  );
+  const total = data?.pagination.total || 0;
   const firstElement = useMemo(() => page * limit - limit + 1, [limit, page]);
   const lastElement = useMemo(
     () => page * limit - (limit - products.length),
     [products, page, limit],
   );
-  const fetchProducts = useCallback(async () => {
-    try {
-      const response = await axios.get(
-        `/api/products?page=${page}&limit=${limit}&q=${search}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        },
-      );
-      const newProducts = response.data.data.map(
-        (item: Product, ind: number) => ({
-          ...item,
-          id: ind + 1,
-        }),
-      );
-      setProducts(newProducts);
-      setTotal(response.data.pagination.total);
-    } catch (error) {
-      console.error(error);
-    }
-  }, [page, limit, search]);
 
   const debouncedSearch = useMemo(
     () =>
@@ -51,14 +38,6 @@ export default function Page() {
       }),
     [],
   );
-
-  useEffect(() => {
-    fetchProducts();
-  }, [fetchProducts]);
-
-  useEffect(() => {
-    console.log(page, limit);
-  }, [page, limit]);
 
   return (
     <Flex className="h-full" vertical gap={12}>
@@ -103,7 +82,8 @@ export default function Page() {
         page={page}
         limit={limit}
         setPage={(page: number) => setPage(page)}
-        page={page}
+        isLoading={isLoading}
+        total={total}
       />
     </Flex>
   );

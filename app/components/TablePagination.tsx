@@ -43,6 +43,8 @@ interface TablePaginationProps {
   page: number;
   limit: number;
   setPage: (page: number) => void;
+  isLoading: boolean;
+  total: number;
 }
 
 export default function TablePagination({
@@ -50,15 +52,18 @@ export default function TablePagination({
   setPage,
   limit,
   page,
+  isLoading,
+  total,
 }: TablePaginationProps) {
   return (
     <Table
       columns={columns}
       dataSource={products}
+      loading={isLoading}
       pagination={{
         position: ["bottomCenter"],
         pageSize: limit,
-        total: 50,
+        total: total,
         onChange: (p) => setPage(p),
         current: page,
       }}
