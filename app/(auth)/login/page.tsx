@@ -6,6 +6,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/app/utils/firebase";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useAuth } from "@/app/context/AuthContext";
 
 const { Title, Text } = Typography;
 
@@ -14,6 +15,7 @@ export default function Login() {
   const [messageApi, contextHolder] = message.useMessage();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { setAuth } = useAuth();
 
   const onSubmit = async (values: { email: string; password: string }) => {
     setLoading(true);
@@ -24,8 +26,9 @@ export default function Login() {
         values.password,
       );
       const token = await userCredential.user.getIdToken();
-      localStorage.setItem("token", token);
+      setAuth(values.email, token);
       messageApi.success("Login successful!");
+      router.push("/products");
     } catch (error: any) {
       messageApi.error(error.message || "Login failed. Please try again.");
       console.error(error);

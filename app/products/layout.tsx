@@ -61,7 +61,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const isMobile = useMediaQuery({ maxWidth: 767 });
   const router = useRouter();
-  const { logout } = useAuth();
+  const { logout, email } = useAuth();
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -149,7 +149,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <div className={!isMobile ? "ml-auto" : ""}>
                 <Dropdown menu={{ items: dropdownItems }}>
                   <Avatar size={32} className="cursor-pointer">
-                    S
+                    {email ? email.charAt(0).toUpperCase() : "U"}
                   </Avatar>
                 </Dropdown>
               </div>
