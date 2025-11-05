@@ -95,7 +95,7 @@ export default function EditModal({
     <>
       {contextHolder}
       <Modal
-        title="Edit Product"
+        title="Product Edit"
         open={open}
         closable={false}
         onCancel={handleCancel}

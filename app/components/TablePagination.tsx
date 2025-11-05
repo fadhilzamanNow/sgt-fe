@@ -37,17 +37,24 @@ export default function TablePagination({
       {
         title: "Name",
         dataIndex: "product_title",
-        key: "name",
+        key: "product_title",
+      },
+      {
+        title: "Category",
+        dataIndex: "product_category",
+        key: "product_category",
+        render: (text: string | null) => <span>{text ? text : "-"}</span>,
       },
       {
         title: "Price",
         dataIndex: "product_price",
-        key: "age",
+        key: "product_price",
       },
       {
         title: "Description",
         dataIndex: "product_description",
-        key: "address",
+        key: "product_description",
+        render: (text: string | null) => <span>{text ? text : "-"}</span>,
       },
       {
         title: "Action",

@@ -60,7 +60,9 @@ export default function DetailModal({
           </Space>
           <Space direction="vertical" size={4}>
             <Text type="secondary">Category</Text>
-            <Text strong>{data?.data.product_category}</Text>
+            <Text strong>
+              {data?.data.product_category ? data?.data.product_category : "-"}
+            </Text>
           </Space>
           <Space direction="vertical" size={4}>
             <Text type="secondary">Price</Text>
@@ -68,7 +70,11 @@ export default function DetailModal({
           </Space>
           <Space direction="vertical" size={4}>
             <Text type="secondary">Description</Text>
-            <Text strong>{data?.data.product_description}</Text>
+            <Text strong>
+              {data?.data.product_description
+                ? data?.data.product_description
+                : "-"}
+            </Text>
           </Space>
           <Space direction="vertical" size={4}>
             <Text type="secondary">Created At</Text>
@@ -80,9 +86,13 @@ export default function DetailModal({
           </Space>
           <Space direction="vertical" size={4}>
             <Text type="secondary">Image</Text>
-            <Button type="primary" onClick={() => setVisible(true)}>
-              Click to see Product Image
-            </Button>
+            {data?.data.product_image ? (
+              <Button type="primary" onClick={() => setVisible(true)}>
+                Click to see Product Image
+              </Button>
+            ) : (
+              <Text strong>-</Text>
+            )}
           </Space>
           <Image
             width={200}

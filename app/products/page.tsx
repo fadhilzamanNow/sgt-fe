@@ -26,7 +26,10 @@ export default function Page() {
     () =>
       data?.data.map((item, ind) => ({
         ...item,
-        id: ind + 1,
+        id:
+          data.pagination.page * data.pagination.limit +
+          1 -
+          (data.data.length - ind),
       })) || [],
     [data],
   );

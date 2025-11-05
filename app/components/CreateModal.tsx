@@ -65,7 +65,7 @@ export default function CreateModal({ open, setOpen }: CreateModalProps) {
     <>
       {contextHolder}
       <Modal
-        title="Product Detail"
+        title="Product Create"
         open={open}
         closable={false}
         onCancel={handleCancel}
