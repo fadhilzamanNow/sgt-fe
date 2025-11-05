@@ -1,4 +1,4 @@
-import { Button, message, Space, Table } from "antd";
+import { Button, Flex, message, Pagination, Space, Table } from "antd";
 import { type Product } from "../types/product";
 import { useMemo } from "react";
 
@@ -97,19 +97,24 @@ export default function TablePagination({
   return (
     <>
       {contextHolder}
-      <Table
-        columns={columns}
-        dataSource={products}
-        loading={isLoading}
-        scroll={{ x: 1000 }}
-        pagination={{
-          position: ["bottomCenter"],
-          pageSize: limit,
-          total: total,
-          onChange: (p) => setPage(p),
-          current: page,
-        }}
-      />
+      <Flex vertical gap={16}>
+        <Table
+          columns={columns}
+          dataSource={products}
+          loading={isLoading}
+          scroll={{ x: 1000 }}
+          pagination={false}
+        />
+        <Flex justify="center">
+          <Pagination
+            current={page}
+            pageSize={limit}
+            total={total}
+            onChange={(p) => setPage(p)}
+            showSizeChanger={false}
+          />
+        </Flex>
+      </Flex>
     </>
   );
 }

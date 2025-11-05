@@ -57,13 +57,18 @@ export default function Page() {
   return (
     <Flex className="h-full" vertical gap={12}>
       <Title level={2}>Product Management</Title>
-      <Flex justify="space-between" align="center" vertical={false}>
+      <Flex
+        justify="space-between"
+        align="center"
+        gap={12}
+        className="flex-col sm:flex-row"
+      >
         <Search
           placeholder="Search product based on product category, name or description"
-          className="!w-120"
+          className="!w-full sm:!w-120"
           onChange={(e) => debouncedSearch(e.target.value)}
         />
-        <Button type="primary">
+        <Button type="primary" className="w-full sm:w-auto">
           <PlusOutlined />
           <Text
             className="border-none flex items-center !text-white"
@@ -73,11 +78,17 @@ export default function Page() {
           </Text>
         </Button>
       </Flex>
-      <Flex justify="space-between" align="center" vertical={false}>
+      <Flex
+        justify="space-between"
+        align="center"
+        gap={12}
+        className="flex-col sm:flex-row"
+      >
         <Select
           placeholder="Select product based on category"
           defaultValue={5}
           onSelect={(val) => setLimit(val)}
+          className="w-full sm:w-auto"
           options={[
             { value: 5, label: "5" },
             { value: 10, label: "10" },
@@ -87,14 +98,14 @@ export default function Page() {
             { value: 50, label: "50" },
           ]}
         />
-        <Space direction="horizontal" size={4}>
-          <Text>Menampilkan </Text>
+        <Space direction="horizontal" size={4} className="flex-wrap">
+          <Text>Showing </Text>
           <Text strong>{firstElement}</Text>
-          <Text>sampai</Text>
+          <Text>to</Text>
           <Text strong>{lastElement}</Text>
-          <Text>dari</Text>
+          <Text>products from</Text>
           <Text strong>{total}</Text>
-          <Text>entri</Text>
+          <Text>entries</Text>
         </Space>
       </Flex>
       <TablePagination

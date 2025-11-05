@@ -45,7 +45,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const getToken = () => {
-    return token || getTokenFromStorage();
+    const currentToken = token || getTokenFromStorage();
+    console.log(
+      "AuthContext - getToken called, returning:",
+      currentToken ? "Token exists" : "No token",
+    );
+    return currentToken;
   };
 
   return (

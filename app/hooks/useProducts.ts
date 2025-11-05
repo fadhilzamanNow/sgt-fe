@@ -35,8 +35,7 @@ const fetchProducts = async (
     `/api/products?page=${page}&limit=${limit}&q=${search || ""}`,
     {
       headers: {
-        Authorization:
-          "eyJhbGciOiJSUzI1NiIsImtpZCI6IjU0NTEzMjA5OWFkNmJmNjEzODJiNmI0Y2RlOWEyZGZlZDhjYjMwZjAiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vc2d0LXRlc3QtYXV0aCIsImF1ZCI6InNndC10ZXN0LWF1dGgiLCJhdXRoX3RpbWUiOjE3NjIzMTc2MTUsInVzZXJfaWQiOiJzeDlZYW9RMVNlVXV0MW1DWWY4NXNDelpvelgyIiwic3ViIjoic3g5WWFvUTFTZVV1dDFtQ1lmODVzQ3pab3pYMiIsImlhdCI6MTc2MjMxNzYxNSwiZXhwIjoxNzYyMzIxMjE1LCJlbWFpbCI6ImZhZGhpbGlzZmFkaGlsbGFoQGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiZmlyZWJhc2UiOnsiaWRlbnRpdGllcyI6eyJlbWFpbCI6WyJmYWRoaWxpc2ZhZGhpbGxhaEBnbWFpbC5jb20iXX0sInNpZ25faW5fcHJvdmlkZXIiOiJwYXNzd29yZCJ9fQ.czyz1ECUdBe2IolZ2S9KUNrviMVM57nmeg6c78v_9T09NUrUfj7OsY4Wc84gMx9kgyHAOehW5TElelrGKby5Ysxt7NfQRqD1ODFH7Di8kYcZnqNjTbBybEnYWvnj2wTVTzogquDsot7rFmLYjpLU2fh960396725IvTvWlfL91L1_uRVYsWCHumXhZ8wlhIrGXgG0HREq7e3we3Qn-hnCl9LM_U46nVauQUNdhKQwVIG-rhYLbYwu_w64VXc1UB12xm3BowUSm9Y3WRl_B_fdCFlWbxIkhBMuv7h4UbTmninWpUVAGIsliZXojQDnKJEaMapKrc8fVwiOrLDi7f4wQ",
+        Authorization: token,
       },
     },
   );
@@ -48,6 +47,13 @@ const fetchProductById = async (
   id: string,
   token: string | null,
 ): Promise<GetProductIdResponse> => {
+  console.log("fetchProductById - Token:", token); // Debug log
+
+  if (!token) {
+    console.error("No token available for fetchProductById");
+    throw new Error("Authentication token is required");
+  }
+
   const response = await axios.get(`/api/product?product_id=${id}`, {
     headers: {
       Authorization: token,
