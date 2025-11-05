@@ -27,10 +27,7 @@ export default function Page() {
     () =>
       data?.data.map((item, ind) => ({
         ...item,
-        id:
-          data.pagination.page * data.pagination.limit +
-          1 -
-          (data.data.length - ind),
+        id: (data.pagination.page - 1) * data.pagination.limit + ind + 1,
       })) || [],
     [data],
   );
