@@ -47,10 +47,6 @@ export default function Page() {
     [],
   );
 
-  useEffect(() => {
-    console.log("selected Id : ", selectedId);
-  }, [selectedId]);
-
   return (
     <Flex className="h-full" vertical gap={12}>
       <Title level={2}>Product Management</Title>

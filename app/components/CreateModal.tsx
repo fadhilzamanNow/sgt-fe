@@ -31,7 +31,6 @@ export default function CreateModal({ open, setOpen }: CreateModalProps) {
         },
         onError: (error) => {
           messageApi.error("Failed to create product");
-          console.error(error);
         },
       });
     } catch (error) {}

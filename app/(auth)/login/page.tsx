@@ -31,7 +31,6 @@ export default function Login() {
       router.push("/products");
     } catch (error: any) {
       messageApi.error(error.message || "Login failed. Please try again.");
-      console.error(error);
     } finally {
       setLoading(false);
     }

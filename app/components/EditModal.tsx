@@ -60,7 +60,6 @@ export default function EditModal({
           },
           onError: (error) => {
             messageApi.error("Failed to update product");
-            console.error(error);
           },
         },
       );

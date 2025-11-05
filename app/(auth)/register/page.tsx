@@ -32,7 +32,6 @@ export default function Register() {
       messageApi.error(
         error.message || "Registration failed. Please try again.",
       );
-      console.error(error);
     } finally {
       setLoading(false);
     }

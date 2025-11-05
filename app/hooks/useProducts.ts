@@ -47,10 +47,7 @@ const fetchProductById = async (
   id: string,
   token: string | null,
 ): Promise<GetProductIdResponse> => {
-  console.log("fetchProductById - Token:", token); // Debug log
-
   if (!token) {
-    console.error("No token available for fetchProductById");
     throw new Error("Authentication token is required");
   }
 
