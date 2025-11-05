@@ -101,6 +101,7 @@ export default function TablePagination({
         columns={columns}
         dataSource={products}
         loading={isLoading}
+        scroll={{ x: 1000 }}
         pagination={{
           position: ["bottomCenter"],
           pageSize: limit,

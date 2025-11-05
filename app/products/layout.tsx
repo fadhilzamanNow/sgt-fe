@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useMediaQuery } from "react-responsive";
 import {
   DesktopOutlined,
   DropboxOutlined,
@@ -8,12 +9,13 @@ import {
   HomeOutlined,
   InboxOutlined,
   LogoutOutlined,
+  MenuOutlined,
   PieChartOutlined,
   TeamOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import type { ConfigProviderProps, MenuProps } from "antd";
-import { Avatar, ConfigProvider, Dropdown, Space } from "antd";
+import { Avatar, Button, ConfigProvider, Drawer, Dropdown, Space } from "antd";
 import { Breadcrumb, Layout as Layouts, Menu, theme } from "antd";
 import { Typography } from "antd";
 import { Flex } from "antd";
@@ -57,44 +59,84 @@ const customTheme: ConfigProviderProps = {
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const isMobile = useMediaQuery({ maxWidth: 767 });
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
+  const sidebarContent = (
+    <>
+      <Flex className="h-16 p-" justify="center" align="center">
+        <Space size="middle">
+          <DropboxOutlined className="!text-black" size={32} />
+          {!collapsed && !isMobile && (
+            <Title level={3} className="!text-black !mb-0 ">
+              Summit
+            </Title>
+          )}
+          {isMobile && (
+            <Title level={3} className="!text-black !mb-0 ">
+              Summit
+            </Title>
+          )}
+        </Space>
+      </Flex>
+      <Menu
+        theme="light"
+        defaultSelectedKeys={["1"]}
+        mode="inline"
+        items={menuItems}
+        className="!border-none"
+      />
+    </>
+  );
+
   return (
     <ConfigProvider {...customTheme}>
       <Layouts style={{ minHeight: "100vh" }}>
-        <Sider
-          collapsed={collapsed}
-          onCollapse={(value: boolean) => setCollapsed(value)}
-          breakpoint="xs"
-          className="!fixed !left-0 !top-0 !bottom-0 !h-screen !overflow-auto !border-r !border-gray-200"
+        {!isMobile && (
+          <Sider
+            collapsed={collapsed}
+            onCollapse={(value: boolean) => setCollapsed(value)}
+            collapsible
+            className="!fixed !left-0 !top-0 !bottom-0 !h-screen !overflow-auto !border-r !border-gray-200"
+          >
+            {sidebarContent}
+          </Sider>
+        )}
+
+        <Drawer
+          placement="left"
+          onClose={() => setDrawerOpen(false)}
+          open={drawerOpen}
+          width={200}
+          styles={{ body: { padding: 0 } }}
+          closeIcon={null}
         >
-          <Flex className="h-16 p-" justify="center" align="center">
-            <Space size="middle">
-              <DropboxOutlined className="!text-black" size={32} />
-              {!collapsed && (
-                <Title level={3} className="!text-black !mb-0 ">
-                  Summit
-                </Title>
-              )}
-            </Space>
-          </Flex>
-          <Menu
-            theme="light"
-            defaultSelectedKeys={["1"]}
-            mode="inline"
-            items={menuItems}
-            className="!border-none"
-          />
-        </Sider>
-        <Layouts className={collapsed ? "!ml-20" : "!ml-[200px]"}>
-          <Header className="flex justify-end items-center shadow-sm !sticky !top-0 !z-10 !bg-white !px-3">
-            <Dropdown menu={{ items: dropdownItems }}>
-              <Avatar size={32} className="cursor-pointer">
-                S
-              </Avatar>
-            </Dropdown>
+          {sidebarContent}
+        </Drawer>
+
+        <Layouts
+          className={!isMobile ? (collapsed ? "!ml-20" : "!ml-[200px]") : ""}
+        >
+          <Header
+            className={`flex ${isMobile ? "justify-between" : "justify-end"} items-center shadow-sm !sticky !top-0 !z-10 !bg-white !px-3`}
+          >
+            {isMobile && (
+              <Button
+                type="text"
+                icon={<MenuOutlined />}
+                onClick={() => setDrawerOpen(true)}
+              />
+            )}
+            <div className={!isMobile ? "ml-auto" : ""}>
+              <Dropdown menu={{ items: dropdownItems }}>
+                <Avatar size={32} className="cursor-pointer">
+                  S
+                </Avatar>
+              </Dropdown>
+            </div>
           </Header>
           <Content className="!m-0 !mx-4">
             <Breadcrumb
