@@ -20,6 +20,7 @@ import { Breadcrumb, Layout as Layouts, Menu, theme } from "antd";
 import { Typography } from "antd";
 import { Flex } from "antd";
 import { StyleProvider } from "@ant-design/cssinjs";
+import AuthGuard from "../components/AuthGuard";
 const { Title } = Typography;
 const { Header, Content, Footer, Sider } = Layouts;
 
@@ -93,60 +94,62 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <ConfigProvider {...customTheme}>
-      <Layouts style={{ minHeight: "100vh" }}>
-        {!isMobile && (
-          <Sider
-            collapsed={collapsed}
-            onCollapse={(value: boolean) => setCollapsed(value)}
-            collapsible
-            className="!fixed !left-0 !top-0 !bottom-0 !h-screen !overflow-auto !border-r !border-gray-200"
+    <AuthGuard>
+      <ConfigProvider {...customTheme}>
+        <Layouts style={{ minHeight: "100vh" }}>
+          {!isMobile && (
+            <Sider
+              collapsed={collapsed}
+              onCollapse={(value: boolean) => setCollapsed(value)}
+              collapsible
+              className="!fixed !left-0 !top-0 !bottom-0 !h-screen !overflow-auto !border-r !border-gray-200"
+            >
+              {sidebarContent}
+            </Sider>
+          )}
+
+          <Drawer
+            placement="left"
+            onClose={() => setDrawerOpen(false)}
+            open={drawerOpen}
+            width={200}
+            styles={{ body: { padding: 0 } }}
+            closeIcon={null}
           >
             {sidebarContent}
-          </Sider>
-        )}
+          </Drawer>
 
-        <Drawer
-          placement="left"
-          onClose={() => setDrawerOpen(false)}
-          open={drawerOpen}
-          width={200}
-          styles={{ body: { padding: 0 } }}
-          closeIcon={null}
-        >
-          {sidebarContent}
-        </Drawer>
-
-        <Layouts
-          className={!isMobile ? (collapsed ? "!ml-20" : "!ml-[200px]") : ""}
-        >
-          <Header
-            className={`flex ${isMobile ? "justify-between" : "justify-end"} items-center shadow-sm !sticky !top-0 !z-10 !bg-white !px-3`}
+          <Layouts
+            className={!isMobile ? (collapsed ? "!ml-20" : "!ml-[200px]") : ""}
           >
-            {isMobile && (
-              <Button
-                type="text"
-                icon={<MenuOutlined />}
-                onClick={() => setDrawerOpen(true)}
+            <Header
+              className={`flex ${isMobile ? "justify-between" : "justify-end"} items-center shadow-sm !sticky !top-0 !z-10 !bg-white !px-3`}
+            >
+              {isMobile && (
+                <Button
+                  type="text"
+                  icon={<MenuOutlined />}
+                  onClick={() => setDrawerOpen(true)}
+                />
+              )}
+              <div className={!isMobile ? "ml-auto" : ""}>
+                <Dropdown menu={{ items: dropdownItems }}>
+                  <Avatar size={32} className="cursor-pointer">
+                    S
+                  </Avatar>
+                </Dropdown>
+              </div>
+            </Header>
+            <Content className="!m-0 !mx-4">
+              <Breadcrumb
+                className="!my-4"
+                items={[{ title: <HomeOutlined /> }, { title: "Product " }]}
               />
-            )}
-            <div className={!isMobile ? "ml-auto" : ""}>
-              <Dropdown menu={{ items: dropdownItems }}>
-                <Avatar size={32} className="cursor-pointer">
-                  S
-                </Avatar>
-              </Dropdown>
-            </div>
-          </Header>
-          <Content className="!m-0 !mx-4">
-            <Breadcrumb
-              className="!my-4"
-              items={[{ title: <HomeOutlined /> }, { title: "Product " }]}
-            />
-            <div className="bg-white rounded-sm !p-4 ">{children}</div>
-          </Content>
+              <div className="bg-white rounded-sm !p-4 ">{children}</div>
+            </Content>
+          </Layouts>
         </Layouts>
-      </Layouts>
-    </ConfigProvider>
+      </ConfigProvider>
+    </AuthGuard>
   );
 }
