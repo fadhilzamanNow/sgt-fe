@@ -58,7 +58,7 @@ export default function TablePagination({
       },
       {
         title: "Action",
-        render: (_, row) => (
+        render: (_: any, row: any) => (
           <Space>
             <Button
               type="primary"

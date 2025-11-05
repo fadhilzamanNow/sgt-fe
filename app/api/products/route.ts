@@ -19,7 +19,14 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(response.data);
   } catch (error) {
     if (error instanceof AxiosError) {
-      throw new Error(error.message);
+      return NextResponse.json(
+        { error: error.message },
+        { status: error.response?.status || 500 },
+      );
     }
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }

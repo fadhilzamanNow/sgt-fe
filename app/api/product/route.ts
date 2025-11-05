@@ -15,8 +15,15 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(response.data);
   } catch (err) {
     if (err instanceof AxiosError) {
-      throw new Error(err.message);
+      return NextResponse.json(
+        { error: err.message },
+        { status: err.response?.status || 500 },
+      );
     }
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }
 
@@ -32,8 +39,15 @@ export async function POST(req: NextRequest) {
     return NextResponse.json(response.data);
   } catch (error) {
     if (error instanceof AxiosError) {
-      throw new Error(error.message);
+      return NextResponse.json(
+        { error: error.message },
+        { status: error.response?.status || 500 },
+      );
     }
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }
 
@@ -51,7 +65,14 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json(response.data);
   } catch (error) {
     if (error instanceof AxiosError) {
-      throw new Error(error.message);
+      return NextResponse.json(
+        { error: error.message },
+        { status: error.response?.status || 500 },
+      );
     }
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 },
+    );
   }
 }
