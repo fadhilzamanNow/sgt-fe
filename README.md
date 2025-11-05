@@ -1,4 +1,4 @@
-[LINK DRIVE MBTI DAN SCREENSHOT APLIKASI](https://drive.google.com/drive/u/1/folders/1j4J-2KcZhKxmD06X1MsVMHfEW_3sdOX-)
+[LINK DRIVE MBTI DAN SCREENSHOT APLIKASI](https://drive.google.com/drive/folders/1j4J-2KcZhKxmD06X1MsVMHfEW_3sdOX-?usp=sharing)
 
 
 
