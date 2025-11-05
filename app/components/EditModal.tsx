@@ -42,7 +42,7 @@ export default function EditModal({
   const { mutate: editProduct, isPending } = useEditProduct();
 
   useEffect(() => {
-    if (data?.data) {
+    if (open && data?.data) {
       form.setFieldsValue({
         product_title: data.data.product_title,
         product_price: data.data.product_price,
@@ -51,7 +51,7 @@ export default function EditModal({
         product_image: data.data.product_image,
       });
     }
-  }, [data, form]);
+  }, [open, data, form]);
 
   const onSubmit = async () => {
     try {
@@ -87,7 +87,6 @@ export default function EditModal({
   };
 
   const handleCancel = () => {
-    form.resetFields();
     setOpen(false);
   };
 
