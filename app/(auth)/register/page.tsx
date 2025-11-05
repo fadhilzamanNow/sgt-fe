@@ -3,23 +3,38 @@
 import { Button, Form, Input, Typography, message } from "antd";
 import { LockOutlined, MailOutlined } from "@ant-design/icons";
 import Link from "next/link";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/app/utils/firebase";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const { Title, Text } = Typography;
 
 export default function Register() {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const onSubmit = async (values: {
     email: string;
     password: string;
     confirmPassword: string;
   }) => {
+    setLoading(true);
     try {
-      console.log("reg val:", values);
-      messageApi.success("Registration successful!");
-    } catch (error) {
-      console.log(error);
+      await createUserWithEmailAndPassword(auth, values.email, values.password);
+      messageApi.success("Registration successful! Please login.");
+      setTimeout(() => {
+        router.push("/login");
+      }, 1000);
+    } catch (error: any) {
+      messageApi.error(
+        error.message || "Registration failed. Please try again.",
+      );
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -44,11 +59,7 @@ export default function Register() {
               { type: "email", message: "Please enter a valid email!" },
             ]}
           >
-            <Input
-              prefix={<MailOutlined />}
-              placeholder="Enter your email"
-              size="large"
-            />
+            <Input placeholder="Enter your email" size="large" />
           </Form.Item>
 
           <Form.Item
@@ -59,11 +70,7 @@ export default function Register() {
               { min: 6, message: "Password must be at least 6 characters!" },
             ]}
           >
-            <Input.Password
-              prefix={<LockOutlined />}
-              placeholder="Enter your password"
-              size="large"
-            />
+            <Input.Password placeholder="Enter your password" size="large" />
           </Form.Item>
 
           <Form.Item
@@ -84,15 +91,17 @@ export default function Register() {
               }),
             ]}
           >
-            <Input.Password
-              prefix={<LockOutlined />}
-              placeholder="Confirm your password"
-              size="large"
-            />
+            <Input.Password placeholder="Confirm your password" size="large" />
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" size="large" block>
+            <Button
+              type="primary"
+              htmlType="submit"
+              size="large"
+              block
+              loading={loading}
+            >
               Sign Up
             </Button>
           </Form.Item>

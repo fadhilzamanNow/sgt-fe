@@ -38,7 +38,7 @@ export default function EditModal({
 }: EditModalProps) {
   const [form] = Form.useForm<ProductFormData>();
   const [messageApi, contextHolder] = message.useMessage();
-  const { data, isLoading } = useGetProductById(selectedId);
+  const { data, isLoading } = useGetProductById(selectedId, !!selectedId);
   const { mutate: editProduct, isPending } = useEditProduct();
 
   useEffect(() => {

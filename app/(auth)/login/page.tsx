@@ -2,19 +2,35 @@
 
 import { Button, Form, Input, Typography, message } from "antd";
 import Link from "next/link";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/app/utils/firebase";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const { Title, Text } = Typography;
 
 export default function Login() {
   const [form] = Form.useForm();
   const [messageApi, contextHolder] = message.useMessage();
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const onSubmit = async (values: { email: string; password: string }) => {
+    setLoading(true);
     try {
-      console.log("Login val:", values);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        values.email,
+        values.password,
+      );
+      const token = await userCredential.user.getIdToken();
+      localStorage.setItem("token", token);
       messageApi.success("Login successful!");
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      messageApi.error(error.message || "Login failed. Please try again.");
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -51,7 +67,13 @@ export default function Login() {
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" size="large" block>
+            <Button
+              type="primary"
+              htmlType="submit"
+              size="large"
+              block
+              loading={loading}
+            >
               Sign In
             </Button>
           </Form.Item>

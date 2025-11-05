@@ -17,7 +17,7 @@ export default function DetailModal({
   selectedId,
 }: DetailModalProps) {
   const [visible, setVisible] = useState(false);
-  const { data, isLoading } = useGetProductById(selectedId);
+  const { data, isLoading } = useGetProductById(selectedId, !!selectedId);
 
   const createdAt = useMemo(() => {
     if (data?.data.created_timestamp) {
