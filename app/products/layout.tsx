@@ -84,7 +84,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <>
       <Flex className="h-16 p-" justify="center" align="center">
         <Space size="middle">
-          <DropboxOutlined className="!text-black" size={32} />
+          <DropboxOutlined className="!text-blue-600" size={32} />
           {!collapsed && !isMobile && (
             <Title level={3} className="!text-black !mb-0 ">
               Summit
