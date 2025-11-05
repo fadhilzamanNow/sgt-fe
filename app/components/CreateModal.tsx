@@ -1,5 +1,4 @@
 import { Button, Form, Input, InputNumber, Modal, message } from "antd";
-import { z } from "zod";
 import { useCreateProduct } from "../hooks/useProducts";
 
 interface CreateModalProps {
@@ -7,19 +6,13 @@ interface CreateModalProps {
   setOpen: (stat: boolean) => void;
 }
 
-const productSchema = z.object({
-  product_title: z
-    .string()
-    .min(3, "Product name must be at least 3 characters"),
-  product_price: z
-    .number({ message: "Price is required" })
-    .positive("Price must be positive"),
-  product_category: z.string().optional(),
-  product_description: z.string().optional(),
-  product_image: z.url("Must be a valid URL").optional().or(z.literal("")),
-});
-
-type ProductFormData = z.infer<typeof productSchema>;
+interface ProductFormData {
+  product_title: string;
+  product_price: number;
+  product_category?: string;
+  product_description?: string;
+  product_image?: string;
+}
 
 export default function CreateModal({ open, setOpen }: CreateModalProps) {
   const [form] = Form.useForm<ProductFormData>();
@@ -29,20 +22,8 @@ export default function CreateModal({ open, setOpen }: CreateModalProps) {
   const onSubmit = async () => {
     try {
       const values = await form.validateFields();
-      const result = productSchema.safeParse(values);
 
-      if (!result.success) {
-        const errors = result.error;
-        form.setFields(
-          Object.entries(errors).map(([name, messages]) => ({
-            name: name as any,
-            errors: messages as string[],
-          })),
-        );
-        return;
-      }
-
-      createProduct(result.data, {
+      createProduct(values, {
         onSuccess: () => {
           messageApi.success("Product created successfully");
           form.resetFields();
@@ -94,20 +75,29 @@ export default function CreateModal({ open, setOpen }: CreateModalProps) {
           <Form.Item
             label="Product Name"
             name="product_title"
-            required
-            rules={[{ required: true, message: "Product name is required" }]}
+            rules={[
+              { required: true, message: "Product name is required" },
+              { min: 3, message: "Product name must be at least 3 characters" },
+            ]}
           >
             <Input placeholder="Enter product name" />
           </Form.Item>
           <Form.Item
             label="Product Price"
             name="product_price"
-            required
-            rules={[{ required: true, message: "Product price is required" }]}
+            rules={[
+              { required: true, message: "Product price is required" },
+              {
+                type: "number",
+                min: 0.01,
+                message: "Price must be greater than 0",
+              },
+            ]}
           >
             <InputNumber
               placeholder="Enter product price"
               className="!w-full"
+              min={0}
             />
           </Form.Item>
           <Form.Item label="Product Category" name="product_category">
@@ -116,7 +106,11 @@ export default function CreateModal({ open, setOpen }: CreateModalProps) {
           <Form.Item label="Product Description" name="product_description">
             <Input.TextArea placeholder="Enter product description" rows={4} />
           </Form.Item>
-          <Form.Item label="Product Image" name="product_image">
+          <Form.Item
+            label="Product Image"
+            name="product_image"
+            rules={[{ type: "url", message: "Please enter a valid URL" }]}
+          >
             <Input placeholder="Enter image URL" />
           </Form.Item>
         </Form>
