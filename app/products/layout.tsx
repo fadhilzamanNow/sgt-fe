@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { useMediaQuery } from "react-responsive";
+import { useRouter } from "next/navigation";
+import { useAuth } from "../context/AuthContext";
 import {
   DesktopOutlined,
   DropboxOutlined,
@@ -40,10 +42,6 @@ function getItem(
   } as MenuItem;
 }
 
-const dropdownItems: MenuProps["items"] = [
-  getItem("Logout", "1", <LogoutOutlined />),
-];
-
 const menuItems: MenuItem[] = [getItem("Products", "1", <InboxOutlined />)];
 
 const customTheme: ConfigProviderProps = {
@@ -62,9 +60,25 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const [collapsed, setCollapsed] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const isMobile = useMediaQuery({ maxWidth: 767 });
+  const router = useRouter();
+  const { logout } = useAuth();
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  const handleLogout = () => {
+    logout();
+    router.push("/login");
+  };
+
+  const dropdownItems: MenuProps["items"] = [
+    {
+      key: "1",
+      label: "Logout",
+      icon: <LogoutOutlined />,
+      onClick: handleLogout,
+    },
+  ];
 
   const sidebarContent = (
     <>
